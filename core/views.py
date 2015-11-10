@@ -34,3 +34,16 @@ class StockDelete(DeleteView):
     model = Stock
     template_name = 'stock/stock_delete_form.html'
     success_url = reverse_lazy('stock_list')
+    
+class CreateReview(CreateView):
+    model = Review
+    template_name = "review/review_form.html"
+    fields = ['text']
+
+    def get_success_url(self):
+        return self.object.stock.get_absolute_url()
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.stock = Stock.objects.get(id=self.kwargs['pk'])
+        return super(CreateReview, self).form_valid(form)

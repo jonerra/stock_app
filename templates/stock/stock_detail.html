@@ -7,4 +7,5 @@
 <p><a href="{% url 'stock_update' pk=stock.id %}">Edit Stock</a></p>
 <p><a href="{% url 'stock_delete' pk=stock.id %}">Delete Stock</a></p>
 {% endif %}
+<p><a href="{% url 'review_create' pk=stock.id %}">Write Review</a></p>
 {% endblock %}
