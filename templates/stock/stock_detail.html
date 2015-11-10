@@ -3,4 +3,7 @@
 <h1>{{ stock.title }}</h1>
 <p>{{ stock.description }}</p>
 <p>Asked by {{ stock.user.username }} on {{ stock.created_at }}</p>
+{% if stock.user == user %}
+<p><a href="{% url 'stock_update' pk=stock.id %}">Edit Stock</a></p>
+{% endif %}
 {% endblock %}

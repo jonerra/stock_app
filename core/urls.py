@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^stock/create/$', StockPost.as_view(), name='stock_create'),
     url(r'stock/$', StockList.as_view(), name='stock_list'),
     url(r'^stock/(?P<pk>\d+)/$', StockDetail.as_view(), name='stock_detail'),
+    url(r'^stock/update/(?P<pk>\d+)/$', StockUpdate.as_view(), name='stock_update'),
 )
