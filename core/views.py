@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import *
 
@@ -24,8 +24,13 @@ class StockList(ListView):
 class StockDetail(DetailView):
     model = Stock
     template_name = 'stock/stock_detail.html'
-    
+
 class StockUpdate(UpdateView):
     model = Stock
     template_name = 'stock/stock_form.html'
     fields = ['symbol', 'company', 'description']
+    
+class StockDelete(DeleteView):
+    model = Stock
+    template_name = 'stock/stock_delete_form.html'
+    success_url = reverse_lazy('stock_list')
