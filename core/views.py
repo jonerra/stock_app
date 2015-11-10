@@ -127,9 +127,18 @@ class VoteFormView(FormView):
             else:
                 prev_votes[0].delete()
         return redirect('stock_list')
-    
+
 class UserDetail(DetailView):
     model = User
     slug_field = 'username'
     template_name = 'user/user_detail.html'
     context_object_name = 'user_in_view'
+    
+    def get_context_data(self, **kwargs):
+        context = super(UserDetail, self).get_context_data(**kwargs)
+        user_in_view = User.objects.get(username=self.kwargs['slug'])
+        stocks = Stock.objects.filter(user=user_in_view)
+        context['stocks'] = stocks
+        reviews = Review.objects.filter(user=user_in_view)
+        context['reviews'] = reviews
+        return context
