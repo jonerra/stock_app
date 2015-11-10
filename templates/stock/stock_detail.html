@@ -13,6 +13,9 @@
 {% for review in reviews %}
 <div class="panel">
     <p>{{ review.text }}</p>
+    {% if review.user == user %}
+    <p><a href="{% url 'review_update' stock_pk=stock.id review_pk=review.id %}">Edit Review</a></p>
+    {% endif %}
     <p>Reviewed by {{ review.user.username }} on {{ review.created_at }}</p>
 </div>
 {% endfor %}

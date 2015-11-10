@@ -54,3 +54,12 @@ class CreateReview(CreateView):
         form.instance.user = self.request.user
         form.instance.stock = Stock.objects.get(id=self.kwargs['pk'])
         return super(CreateReview, self).form_valid(form)
+
+class UpdateReview(UpdateView):
+    model = Review
+    pk_url_kwarg = 'review_pk'
+    template_name = 'review/review_form.html'
+    fields = ['text']
+
+    def get_success_url(self):
+        return self.object.stock.get_absolute_url()
