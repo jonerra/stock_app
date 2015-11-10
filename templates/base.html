@@ -26,6 +26,7 @@
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'stock_list' %}">Stocks</a></li>
                         <li><a href="{% url 'stock_create' %}">Add Stock</a></li>
+                        <li><a href="{% url 'user_detail' slug=user.username %}">My Profile</a></li>
                         <li><a href="{% url 'auth_logout' %}">Logout</a></li>
                         {% else %}
                         <li><a href="{% url 'auth_login' %}">Login</a></li>
@@ -37,7 +38,7 @@
         <div class="container">
             {% block content %}
             {% endblock %}
-        </div>    
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </body>
