@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 from django.core.urlresolvers import reverse_lazy
-from .models import *
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from .models import *
+from .forms import *
 
 # Create your views here.
 class Home(TemplateView):
@@ -95,9 +97,23 @@ class DeleteReview(DeleteView):
 
     def get_success_url(self):
         return self.object.stock.get_absolute_url()
-    
+
     def get_object(self, *args, **kwargs):
         object = super(DeleteReview, self).get_object(*args, **kwargs)
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
+    
+class VoteFormView(FormView):
+    form_class = VoteForm
+    
+    def form_valid(self, form):
+        user = self.request.user
+        stock = Stock.objects.get(pk=form.data["stock"])
+        prev_votes = Vote.objects.filter(user=user, stock=stock)
+        has_voted = (prev_votes.count()>0)  
+        if not has_voted:
+            Vote.objects.create(user=user, stock=stock)
+        else:
+            prev_votes[0].delete()
+        return redirect('stock_list')
