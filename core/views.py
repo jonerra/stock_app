@@ -31,6 +31,8 @@ class StockDetail(DetailView):
         stock = Stock.objects.get(id=self.kwargs['pk'])
         reviews = Review.objects.filter(stock=stock)
         context['reviews'] = reviews
+        user_reviews = Review.objects.filter(stock=stock, user=self.request.user)
+        context['user_reviews'] = user_reviews
         return context
 
 class StockUpdate(UpdateView):
@@ -64,6 +66,9 @@ class CreateReview(CreateView):
         return self.object.stock.get_absolute_url()
 
     def form_valid(self, form):
+        stock = Stock.objects.get(id=self.kwargs['pk'])
+        if Review.objects.filter(stock=stock, user=self.request.user).exists():
+            raise PermissionDenied()
         form.instance.user = self.request.user
         form.instance.stock = Stock.objects.get(id=self.kwargs['pk'])
         return super(CreateReview, self).form_valid(form)
