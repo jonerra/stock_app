@@ -2,7 +2,7 @@
 {% block content %}
 {% for stock in object_list %}
 <div class="panel">
-    <h3>{{ stock.company }}</h3>
+    <h3><a href="{{ stock.get_absolute_url }}">{{ stock.company }}</a></h3>
     <p>Asked by {{ stock.user.username }} on {{ stock.created_at }}</p>
 </div>
 {% endfor %}

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ stock.title }}</h1>
+<p>{{ stock.description }}</p>
+<p>Asked by {{ stock.user.username }} on {{ stock.created_at }}</p>
+{% endblock %}
