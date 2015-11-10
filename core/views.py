@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import *
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 class Home(TemplateView):
@@ -37,10 +38,22 @@ class StockUpdate(UpdateView):
     template_name = 'stock/stock_form.html'
     fields = ['symbol', 'company', 'description']
 
+    def get_object(self, *args, **kwargs):
+        object = super(StockUpdate, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
+
 class StockDelete(DeleteView):
     model = Stock
     template_name = 'stock/stock_delete_form.html'
     success_url = reverse_lazy('stock_list')
+
+    def get_object(self, *args, **kwargs):
+        object = super(StockDelete, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
 
 class CreateReview(CreateView):
     model = Review
@@ -64,6 +77,12 @@ class UpdateReview(UpdateView):
     def get_success_url(self):
         return self.object.stock.get_absolute_url()
 
+    def get_object(self, *args, **kwargs):
+        object = super(UpdateReview, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
+
 class DeleteReview(DeleteView):
     model = Review
     pk_url_kwarg = 'review_pk'
@@ -71,3 +90,9 @@ class DeleteReview(DeleteView):
 
     def get_success_url(self):
         return self.object.stock.get_absolute_url()
+    
+    def get_object(self, *args, **kwargs):
+        object = super(DeleteReview, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
