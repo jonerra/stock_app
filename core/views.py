@@ -63,3 +63,11 @@ class UpdateReview(UpdateView):
 
     def get_success_url(self):
         return self.object.stock.get_absolute_url()
+
+class DeleteReview(DeleteView):
+    model = Review
+    pk_url_kwarg = 'review_pk'
+    template_name = 'review/review_delete_form.html'
+
+    def get_success_url(self):
+        return self.object.stock.get_absolute_url()
