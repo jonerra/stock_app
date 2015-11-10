@@ -12,10 +12,10 @@ class Stock(models.Model):
 
     def __unicode__(self):
         return self.company
-    
+
     def get_absolute_url(self):
         return reverse("stock_detail", args=[self.id])
-    
+
 class Review(models.Model):
     stock = models.ForeignKey(Stock)
     user = models.ForeignKey(User)
@@ -24,10 +24,11 @@ class Review(models.Model):
 
     def __unicode__(self):
         return self.text
-    
+
 class Vote(models.Model):
     user = models.ForeignKey(User)
-    stock = models.ForeignKey(Stock)
-    
+    stock = models.ForeignKey(Stock, blank=True, null=True)
+    review = models.ForeignKey(Review, blank=True, null=True)
+
     def __unicode__(self):
         return "%s upvoted" % (self.user.username)

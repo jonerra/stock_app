@@ -103,17 +103,27 @@ class DeleteReview(DeleteView):
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
-    
+
 class VoteFormView(FormView):
     form_class = VoteForm
-    
+
     def form_valid(self, form):
         user = self.request.user
         stock = Stock.objects.get(pk=form.data["stock"])
-        prev_votes = Vote.objects.filter(user=user, stock=stock)
-        has_voted = (prev_votes.count()>0)  
-        if not has_voted:
-            Vote.objects.create(user=user, stock=stock)
-        else:
-            prev_votes[0].delete()
+        try:
+            review = Review.objects.get(pk=form.data["review"])
+            prev_votes = Vote.objects.filter(user=user, review=review)
+            has_voted = (prev_votes.count()>0)
+            if not has_voted:
+                Vote.objects.create(user=user, review=review)
+            else:
+                prev_votes[0].delete()
+            return redirect(reverse('stock_detail', args=[form.data["stock"]]))
+        except:
+            prev_votes = Vote.objects.filter(user=user, stock=stock)
+            has_voted = (prev_votes.count()>0)
+            if not has_voted:
+                Vote.objects.create(user=user, stock=stock)
+            else:
+                prev_votes[0].delete()
         return redirect('stock_list')
