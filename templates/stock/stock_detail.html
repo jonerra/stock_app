@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{ stock.title }}</h1>
+<h1>{{ stock.company }}</h1>
 <p>{{ stock.description }}</p>
 <p>Asked by {{ stock.user.username }} on {{ stock.created_at }}</p>
 {% if stock.user == user %}
 <p><a href="{% url 'stock_update' pk=stock.id %}">Edit Stock</a></p>
 <p><a href="{% url 'stock_delete' pk=stock.id %}">Delete Stock</a></p>
 {% endif %}
+{% if reviews.count > 0 %}
+<h3>{{ reviews.count }} Review{{ reviews.count|pluralize }}:</h3>
+{% endif %}
+{% for review in reviews %}
+<div class="panel">
+    <p>{{ review.text }}</p>
+    <p>Reviewed by {{ review.user.username }} on {{ review.created_at }}</p>
+</div>
+{% endfor %}
 <p><a href="{% url 'review_create' pk=stock.id %}">Write Review</a></p>
 {% endblock %}
