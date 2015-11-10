@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for stock in object_list %}
+<div class="panel">
+    <h3>{{ stock.company }}</h3>
+    <p>Asked by {{ stock.user.username }} on {{ stock.created_at }}</p>
+</div>
+{% endfor %}
+{% endblock %}
