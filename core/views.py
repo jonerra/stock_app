@@ -157,3 +157,23 @@ class UserEdit(UpdateView):
         if object != self.request.user:
             raise PermissionDenied()
         return object
+    
+class DeleteUser(DeleteView):
+    model = User
+    slug_field = "username"
+    template_name = 'user/user_delete_form.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('logout')
+
+    def get_object(self, *args, **kwargs):
+        object = super(DeleteUser, self).get_object(*args, **kwargs)
+        if object != self.request.user:
+            raise PermissionDenied()
+        return object
+    
+    def delete(self, request, *args, **kwargs):
+        user = super(DeleteUser, self).get_object(*args)
+        user.is_active = False
+        user.save()
+        return redirect(self.get_success_url())
