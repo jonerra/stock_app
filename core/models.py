@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
+POST_CHOICES = (
+(0, 'Public'),
+(1, 'Anonymous'),
+)
+
 # Create your models here.
 class Stock(models.Model):
     symbol = models.CharField(max_length=300)
@@ -9,6 +14,7 @@ class Stock(models.Model):
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User)
+    post = models.IntegerField(choices=POST_CHOICES, default=0)
 
     def __unicode__(self):
         return self.company
@@ -21,6 +27,7 @@ class Review(models.Model):
     user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
+    post = models.IntegerField(choices=POST_CHOICES, default=0)
 
     def __unicode__(self):
         return self.text

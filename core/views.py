@@ -13,7 +13,7 @@ class Home(TemplateView):
 class StockPost(CreateView):
     model = Stock
     template_name = "stock/stock_form.html"
-    fields = ['symbol', 'company', 'description']
+    fields = ['symbol', 'company', 'description', 'post']
     success_url = reverse_lazy('stock_list')
 
     def form_valid(self, form):
@@ -63,7 +63,7 @@ class StockDelete(DeleteView):
 class CreateReview(CreateView):
     model = Review
     template_name = "review/review_form.html"
-    fields = ['text']
+    fields = ['text', 'post']
 
     def get_success_url(self):
         return self.object.stock.get_absolute_url()
@@ -138,9 +138,9 @@ class UserDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserDetail, self).get_context_data(**kwargs)
         user_in_view = User.objects.get(username=self.kwargs['slug'])
-        stocks = Stock.objects.filter(user=user_in_view)
+        stocks = Stock.objects.filter(user=user_in_view).exclude(post=1)
         context['stocks'] = stocks
-        reviews = Review.objects.filter(user=user_in_view)
+        reviews = Review.objects.filter(user=user_in_view).exclude(post=1)
         context['reviews'] = reviews
         return context
 

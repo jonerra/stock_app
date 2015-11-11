@@ -3,7 +3,7 @@
 {% for stock in object_list %}
 <div class="panel">
     <h3><a href="{{ stock.get_absolute_url }}">{{ stock.company }}</a></h3>
-    <p>Posted by <a href="{% url 'user_detail' slug=stock.user.username %}">{{ stock.user.username }}</a> on {{ stock.created_at }}</p>
+    <p>Posted {% if stock.post == 0 %} by <a href="{% url 'user_detail' slug=stock.user.username %}">{{ stock.user.username }}</a> {% endif %} on {{ stock.created_at }}</p>
     <p>{{ stock.vote_set.all.count }} Vote{{ stock.vote_set.all.count|pluralize }}</p>
     <form method="post" action="{% url 'vote' %}">
         {% csrf_token %}

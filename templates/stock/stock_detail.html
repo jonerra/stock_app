@@ -2,7 +2,7 @@
 {% block content %}
 <h1>{{ stock.company }}</h1>
 <p>{{ stock.description }}</p>
-<p>Posted by <a href="{% url 'user_detail' slug=stock.user.username %}">{{ stock.user.username }}</a> on {{ stock.created_at }}</p>
+<p>Posted {% if stock.post == 0 %} by <a href="{% url 'user_detail' slug=stock.user.username %}">{{ stock.user.username }}</a> {% endif %} on {{ stock.created_at }}</p>
 {% if stock.user == user %}
 <p><a href="{% url 'stock_update' pk=stock.id %}">Edit Stock</a></p>
 <p><a href="{% url 'stock_delete' pk=stock.id %}">Delete Stock</a></p>
@@ -17,7 +17,7 @@
     <p><a href="{% url 'review_update' stock_pk=stock.id review_pk=review.id %}">Edit Review</a></p>
     <p><a href="{% url 'review_delete' stock_pk=stock.id review_pk=review.id %}">Delete Review</a></p>
     {% endif %}
-    <p>Reviewed by <a href="{% url 'user_detail' slug=review.user.username %}">{{ review.user.username }}</a> on {{ review.created_at }} ({{ review.vote_set.all.count }} Vote{{ review.vote_set.all.count|pluralize }})</p>
+    <p>Reviewed {% if review.post == 0 %} by <a href="{% url 'user_detail' slug=review.user.username %}">{{ review.user.username }}</a> {% endif %} on {{ review.created_at }} ({{ review.vote_set.all.count }} Vote{{ review.vote_set.all.count|pluralize }})</p>
     <p>{{ review.vote_set.all.count }} Vote{{ review.vote_set.all.count|pluralize }}</p>
     <form method="post" action="{% url 'vote' %}">
         {% csrf_token %}
