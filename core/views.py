@@ -23,6 +23,7 @@ class StockPost(CreateView):
 class StockList(ListView):
     model = Stock
     template_name = "stock/stock_list.html"
+    paginate_by = 5
 
 class StockDetail(DetailView):
     model = Stock
