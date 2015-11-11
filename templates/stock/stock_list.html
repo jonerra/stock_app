@@ -4,12 +4,21 @@
 <div class="panel">
     <h3><a href="{{ stock.get_absolute_url }}">{{ stock.company }}</a></h3>
     <p>Posted {% if stock.post == 0 %} by <a href="{% url 'user_detail' slug=stock.user.username %}">{{ stock.user.username }}</a> {% endif %} on {{ stock.created_at }}</p>
-    <p>{{ stock.vote_set.all.count }} Vote{{ stock.vote_set.all.count|pluralize }}</p>
     <form method="post" action="{% url 'vote' %}">
+        <span class="badge">{{ stock.review_set.all.count }} Review{{  stock.review_set.all.count|pluralize }}</span>
+        <span class="badge">{{ stock.vote_set.all.count }} Vote{{ stock.vote_set.all.count|pluralize }}</span>
         {% csrf_token %}
         <input type="hidden" name="stock" value="{{ stock.id }}" />
         <input type="hidden" name="user" value="{{ user.id }}" />
-        <button>+</button>
+        {% if stock in user_votes %}
+        <button class="btn btn-link">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+        </button>
+        {% else %}
+        <button class="btn btn-link">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+        </button>
+        {% endif %}
     </form>
 </div>
 {% empty %}

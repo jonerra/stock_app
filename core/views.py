@@ -25,6 +25,12 @@ class StockList(ListView):
     template_name = "stock/stock_list.html"
     paginate_by = 5
 
+    def get_context_data(self, **kwargs):
+        context = super(StockList, self).get_context_data(**kwargs)
+        user_votes = Stock.objects.filter(vote__user=self.request.user)
+        context['user_votes'] = user_votes
+        return context
+
 class StockDetail(DetailView):
     model = Stock
     template_name = 'stock/stock_detail.html'
@@ -36,6 +42,8 @@ class StockDetail(DetailView):
         context['reviews'] = reviews
         user_reviews = Review.objects.filter(stock=stock, user=self.request.user)
         context['user_reviews'] = user_reviews
+        user_votes = Review.objects.filter(vote__user=self.request.user)
+        context['user_votes'] = user_votes
         return context
 
 class StockUpdate(UpdateView):
