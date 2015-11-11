@@ -157,12 +157,12 @@ class UserEdit(UpdateView):
         if object != self.request.user:
             raise PermissionDenied()
         return object
-    
+
 class DeleteUser(DeleteView):
     model = User
     slug_field = "username"
     template_name = 'user/user_delete_form.html'
-    
+
     def get_success_url(self):
         return reverse_lazy('logout')
 
@@ -171,9 +171,14 @@ class DeleteUser(DeleteView):
         if object != self.request.user:
             raise PermissionDenied()
         return object
-    
+
     def delete(self, request, *args, **kwargs):
         user = super(DeleteUser, self).get_object(*args)
         user.is_active = False
         user.save()
         return redirect(self.get_success_url())
+
+class SearchStock(StockList):
+    def get_queryset(self):
+        incoming_query_string = self.request.GET.get('query','')
+        return Stock.objects.filter(company__icontains=incoming_query_string)
